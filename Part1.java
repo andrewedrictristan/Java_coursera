@@ -1,3 +1,5 @@
+package java_coursera;
+
 import edu.duke.*;
 /**
  * Beschreiben Sie hier die Klasse Part1.
@@ -161,11 +163,60 @@ public class Part1 {
         return times;
     }
     
+    public String getLongestGene(StorageResource sr){
+        int maxLen= 0;
+        String longestGene= "";
+        
+        for(String gene: sr.data()){
+            int len = gene.length();
+            
+            if(len > maxLen){
+                maxLen = len;
+                longestGene = gene;
+            }
+        }
+        return longestGene;
+    }
+    
     public void processGene(StorageResource sr){
-        FileResource fr = new FileResource("GRch38dnapart.fa");
-        String dna = fr.asString();
+        int counterOfNine= 0;
+        int counterOfRatio=0;
+        int startIndex = 0;
+        String dna= "";
+        String longest= "";
+       
+        for(String s : sr.data()){
+            dna = findGene(s, startIndex);
+            
+            if(dna.length() > 60){
+                System.out.println("String in sr that are longer than 9 characters: " + s);
+                counterOfNine++;
+            }
+            
+            if(cgRatio(s) > 0.35){
+                System.out.println("String in sr whose C-G-ratio is higher than 0.35: "+s);
+                counterOfRatio++;
+            }
+            
+            System.out.println("HOW MANY Strings that are longer than 9 characters: " + counterOfNine);
+            System.out.println("HOW MANY C-G-ratio is higher than 0.35:" + counterOfRatio);
+            System.out.println("THE LONGEST GENE: "+ getLongestGene(sr).length());
+        }      
+    }
+    
+    public void testProcessGenes(){
         
+        FileResource fr = new FileResource("brca1line.fa");
+        String dna = fr.asString().toUpperCase();
+        System.out.println(dna);
+        StorageResource geneList= new StorageResource();
+        geneList.add(dna);
+       
         
+        processGene(geneList);
+        
+       
+       
     }
     
     public void test(){
@@ -175,6 +226,14 @@ public class Part1 {
        
        
     }
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 }
